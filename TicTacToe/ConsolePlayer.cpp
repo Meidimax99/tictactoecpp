@@ -33,8 +33,7 @@ Action* ConsolePlayer::getNextAction(Board* board)
 }
 
 void ConsolePlayer::sendMessage(const std::string & message) {
-
-
+	std::cout << message << std::endl;
 }
 
 

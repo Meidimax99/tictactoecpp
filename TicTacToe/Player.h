@@ -1,5 +1,6 @@
 #pragma once
 class Action;
+class Board;
 #include "Action.h"
 #include "Board.h"
 

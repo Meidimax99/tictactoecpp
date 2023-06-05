@@ -16,8 +16,7 @@ GameResult* Game::start()
 	auto next = a;
 	auto prev = b;
 	while (!board.finished()) {
-		board.drawBoard();
-		auto action = next->getNextAction();
+		auto action = next->getNextAction(&board);
 
 		while (!board.isActionAllowed(action)) {
 			next->sendMessage("Action not allowed, try again");
@@ -33,13 +32,16 @@ GameResult* Game::start()
 	}
 	auto winner_marker = board.winning();
 	if (winner_marker == a->getMarker()) {
-		std::cout << "Player '" + a->player_id << "' won!" << std::endl;
+		next->sendMessage("Player '" + a->player_id + "' won!");
+		prev->sendMessage("Player '" + a->player_id + "' won!");
 	}
 	else if (winner_marker == b->getMarker()) {
-		std::cout << "Player '" + b->player_id << "' won!" << std::endl;
+		next->sendMessage("Player '" + b->player_id + "' won!");
+		prev->sendMessage("Player '" + b->player_id + "' won!");
 	}
 	else {
-		std::cout << "Its a draw!" << std::endl;
+		next->sendMessage("Its a draw!");
+		prev->sendMessage("Its a draw!");
 	}
 	return result;
 }
