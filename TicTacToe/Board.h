@@ -1,17 +1,16 @@
 #pragma once
 #include "Action.h"
-#include "Game.h"
 #include <iostream>
 class Board
 {
 public:
-	Board();
-	bool isActionAllowed(Action *action) const;
+	Board(size_t height, size_t width);
+	bool isActionAllowed(Action *action) const noexcept;
 	bool applyAction(Action *action);
-	void drawBoard();
-	char winning();
-	bool finished();
+	void print() const noexcept;
 private:
-	char state[3][3];
+	char ** m_state;
+	size_t m_width;
+	size_t m_heigth;
 };
 

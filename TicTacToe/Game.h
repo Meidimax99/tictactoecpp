@@ -1,18 +1,21 @@
 #pragma once
-class Player;
-class GameResult;
 #include "Player.h"
+#include "Board.h"
 #include "GameResult.h"
 #include <memory>
 
 class Game
 {
 public:
-	Game(std::shared_ptr<Player> player_a, std::shared_ptr<Player> player_b);
-
+	Game(std::list<Player*> &&players, size_t height, size_t width, size_t streak_length);
 	GameResult* start();
+	bool finished();
+	char getWinningPlayer();
 private:
-	std::shared_ptr<Player> a;
-	std::shared_ptr<Player> b;
+	std::list<Player*> m_players;
+	size_t winning_streak_length;
+	Board m_board;
+	Action* last;
+	const char* markers = "XOABCDEFGHIJKLMNPQRSTUVWYZabcdefghijklmnopqrstuvwxyz";
 };
 

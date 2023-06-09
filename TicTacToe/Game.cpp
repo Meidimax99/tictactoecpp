@@ -1,47 +1,57 @@
 #include "Game.h"
 #include "Board.h"
 
-Game::Game(std::shared_ptr<Player> player_a, std::shared_ptr<Player> player_b): a(player_a), b(player_b)
+Game::Game(std::list<Player*> &&players, size_t height, size_t width, size_t streak_length): m_players(players), winning_streak_length(streak_length), m_board(height, width)
 {
-	a->setMarker('X');
-	b->setMarker('O');
+	if (m_players.empty()) 
+	{
+		throw std::exception("No players set!");
+	}
+	last = nullptr;
+	size_t index = 0;
+	for (auto& player : players) 
+	{
+		player->setMarker(markers[index]);
+		index++;
+	}
 }
 
 GameResult* Game::start()
 {
 	GameResult* result = new GameResult;
+	auto it = std::begin(m_players);
+	while (!this->finished()) 
+	{
+		auto player = *it;
 
-	Board board;
-
-	auto next = a;
-	auto prev = b;
-	while (!board.finished()) {
-		auto action = next->getNextAction(&board);
-
-		while (!board.isActionAllowed(action)) {
-			next->sendMessage("Action not allowed, try again");
-			action = next->getNextAction(&board);
+		//Get and apply action
+		auto next_action = player->getNextAction(&m_board);
+		while (!m_board.isActionAllowed(next_action))
+		{
+			player->sendMessage("Illegal Move\n");
+			next_action = player->getNextAction(&m_board);
 		}
+		m_board.applyAction(next_action);
 
-		board.applyAction(action);
+		it++;
 
-		result->addAction(action);
-		auto temp = next;
-		next = prev;
-		prev = temp;
-	}
-	auto winner_marker = board.winning();
-	if (winner_marker == a->getMarker()) {
-		next->sendMessage("Player '" + a->player_id + "' won!");
-		prev->sendMessage("Player '" + a->player_id + "' won!");
-	}
-	else if (winner_marker == b->getMarker()) {
-		next->sendMessage("Player '" + b->player_id + "' won!");
-		prev->sendMessage("Player '" + b->player_id + "' won!");
-	}
-	else {
-		next->sendMessage("Its a draw!");
-		prev->sendMessage("Its a draw!");
+		//Reset Iterator
+		if (std::end(m_players) == it)
+		{
+			it = m_players.begin();
+		}
 	}
 	return result;
 }
+
+bool Game::finished()
+{
+	return false;
+}
+
+char Game::getWinningPlayer()
+{
+	return '-';
+}
+
+

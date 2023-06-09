@@ -22,7 +22,7 @@ size_t getNumber() {
 
 Action* ConsolePlayer::getNextAction(Board* board) 
 {
-	board->drawBoard();
+	board->print();
 	std::cout << "Enter x position: ";
 	size_t x = getNumber();
 	std::cout << "Enter y position: ";

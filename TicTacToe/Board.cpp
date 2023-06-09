@@ -1,78 +1,48 @@
 #include "Board.h"
 
-Board::Board()
+Board::Board(size_t height, size_t width): m_width(width), m_heigth(height)
 {
-	size_t size = 3;
-	for (size_t x = 0; x < size; x++) {
-		for (size_t y = 0; y < size; y++) {
-			state[x][y] = '-';
+	m_state = new char*[height];
+	for (size_t index = 0; index < height; index++)
+	{
+		m_state[index] = new char[width];
+	}
+	for (size_t row = 0; row < height; row++) {
+		for (size_t col = 0; col < width; col++) {
+			m_state[row][col] = '-';
 		}
 	}
 }
 
-bool Board::isActionAllowed(Action *action) const
+bool Board::isActionAllowed(Action *action) const noexcept
 {
 	auto position = action->getPosition();
-	return state[position.first][position.second] == '-';
+	if (position.first > m_heigth || position.second > m_width) 
+	{
+		return false;
+	}
+	return m_state[position.first][position.second] == '-';
 }
 
 bool Board::applyAction(Action *action)
 {
-	if (!isActionAllowed(action)) {
+	if (!isActionAllowed(action)) 
+	{
 		throw std::exception("Action is not allowed!");
 	}
 	auto position = action->getPosition();
-	state[position.first][position.second] = action->getMarker();
+	m_state[position.first][position.second] = action->getMarker();
 	return false;
 }
 
-void Board::drawBoard()
+void Board::print() const noexcept
 {
-	size_t size = 3;
-	for (size_t x = 0; x < size; x++) {
-		for (size_t y = 0; y < size; y++) {
-			std::cout << state[x][y];
-			
+	for (size_t x = 0; x < m_heigth; x++) {
+		for (size_t y = 0; y < m_width; y++) {
+			std::cout << m_state[x][y] << " ";
 		}
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
 }
 
-char Board::winning()
-{
-	size_t size = 3;
-	//Check linear wins
-	for (size_t i = 0; i < size; i++) {
-		if (state[i][0] != '-' && (state[i][0] == state[i][1] && state[i][0] == state[i][2])) {
-			return state[i][0];
-		}
-		if (state[0][i] != '-' && (state[0][i] == state[1][i] && state[0][i] == state[2][i])) {
-			return state[i][0];
-		}
-	}
-	if (state[0][0] != '-' && (state[0][0] == state[1][1] && state[0][0] == state[2][2])) {
-		return state[0][0];
-	}
-	if (state[0][2] != '-' && (state[0][2] == state[1][1] && state[0][2] == state[2][0])) {
-		return state[0][2];
-	}
-	return '-';
-}
-
-bool Board::finished()
-{
-	if (!('-' == winning())) {
-		return true;
-	}
-
-	size_t size = 3;
-	for (size_t x = 0; x < size; x++) {
-		for (size_t y = 0; y < size; y++) {
-			if (state[x][y] == '-') {
-				return false;
-			}
-		}
-	}
-	return true;
-}

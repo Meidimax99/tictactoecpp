@@ -4,9 +4,14 @@
 #include "GameResult.h"
 int main()
 {
-	std::shared_ptr<Player> a(new ConsolePlayer("Human1"));
-	std::shared_ptr<Player> b(new ConsolePlayer("Human2"));
-	Game game(a, b);
+	std::list<Player*> players;
+
+	players.push_back(new ConsolePlayer("1"));
+	players.push_back(new ConsolePlayer("2"));
+	players.push_back(new ConsolePlayer("3"));
+	players.push_back(new ConsolePlayer("4"));
+
+	Game game(std::move(players), 20, 20, 5);
 	
 	auto result = game.start();
 	//result.print();
