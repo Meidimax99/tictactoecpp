@@ -11,7 +11,7 @@ int main()
 	//players.push_back(new ConsolePlayer("3"));
 	//players.push_back(new ConsolePlayer("4"));
 
-	Game game(std::move(players), 20, 20, 1);
+	Game game(std::move(players), 20, 20, 4);
 	
 	auto result = game.start();
 	//result.print();

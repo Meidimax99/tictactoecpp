@@ -86,6 +86,7 @@ bool Game::finished()
 			{
 				if(board[row][y] != marker)
 				{ 
+					start_check = y;
 					break;
 				}
 				else if ((y - start_check) == winning_streak_length - 1)
@@ -106,6 +107,7 @@ bool Game::finished()
 			{
 				if (board[x][col] != marker)
 				{
+					start_check = x;
 					break;
 				}
 				else if ((x - start_check) == winning_streak_length - 1)
@@ -146,6 +148,7 @@ bool Game::finished()
 				{
 					if (board[start_x + check_index][start_x + check_index] != marker)
 					{
+						start_index += check_index;
 						break;
 					}
 					else if (check_index == winning_streak_length - 1)
@@ -181,6 +184,7 @@ bool Game::finished()
 					auto board_marker = m_board.m_state[start_x - check_index][start_y + check_index];
 					if (board_marker != marker)
 					{
+						start_index += check_index;
 						break;
 					}
 					else if (check_index == winning_streak_length - 1)
