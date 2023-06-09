@@ -1,4 +1,5 @@
 #include "ConsolePlayer.h"
+#include <iostream>
 
 ConsolePlayer::ConsolePlayer(std::string id) : Player(id)
 {
@@ -22,7 +23,7 @@ size_t getNumber() {
 
 Action* ConsolePlayer::getNextAction(Board* board) 
 {
-	board->print();
+	board->print(std::cout);
 	std::cout << "Enter x position: ";
 	size_t x = getNumber();
 	std::cout << "Enter y position: ";

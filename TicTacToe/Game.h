@@ -10,7 +10,7 @@ public:
 	Game(std::list<Player*> &&players, size_t height, size_t width, size_t streak_length);
 	GameResult* start();
 	bool finished();
-	char getWinningPlayer();
+	Player* getWinningPlayer();
 private:
 	std::list<Player*> m_players;
 	size_t winning_streak_length;
